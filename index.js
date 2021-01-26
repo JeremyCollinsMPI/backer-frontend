@@ -7,13 +7,16 @@ class Steps extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-     moose: ['dog', 'cat']
+     moose: [1, 2],
+     currentStepNumber: 2
     };
   }
   
   addStep() {
+  const currentStepNumber = this.state.currentStepNumber + 1;
   this.setState({
-    moose: this.state.moose.concat('fish')
+    moose: this.state.moose.concat(currentStepNumber),
+    currentStepNumber: currentStepNumber
   })
   }
 
@@ -23,22 +26,35 @@ class Steps extends React.Component {
     
     const steps = moose.map(thing => {
       const desc = 'Choose function';
+      const outputName = 'output ' + thing; 
       return (
-        <div>
-         <div className="b">mate</div>       
-        <button className="a" onClick={() => alert('click')}>{desc}</button>
-        
-          
-          
-        </div>
+<div>
+    <form className = "f" action="/action_page.php">
+  <input type="file" id="myFile" name="filename"></input>
+</form>    
+
+ 
+      
+       <div className="f"> <button  onClick={() => alert('click')}>{desc}</button></div>
+         <div className="f">{outputName}</div> 
+</div>
+
+
+
+
+
       );
     });
     return (
+<div>
     <div>
      <button onClick={() => this.addStep()}>Add step</button>
       {steps}
       </div>
-     
+
+<p>Click on the "Add step" button to add steps</p>
+  
+</div>
     );
   }
 }

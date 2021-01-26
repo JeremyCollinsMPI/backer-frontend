@@ -14,3 +14,16 @@ body {
   margin-left: 500px;
 }
 
+.d {
+  float:left;
+}
+
+.e {
+  float:left;
+  margin-left: 500px;
+}
+
+.f {
+  display: inline-block;
+  width: 400px;
+}
