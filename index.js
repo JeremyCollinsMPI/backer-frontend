@@ -11,7 +11,7 @@ class Steps extends React.Component {
     };
   }
   
-  hello() {
+  addStep() {
   this.setState({
     moose: this.state.moose.concat('fish')
   })
@@ -21,19 +21,22 @@ class Steps extends React.Component {
     const moose = this.state.moose;
 
     
-    const moves = moose.map(thing => {
+    const steps = moose.map(thing => {
       const desc = 'Choose function';
       return (
-        <li key={thing}>
-          <button className="a" onClick={() => alert('click')}>{desc}</button>
-          <div className="b">mate</div>
-        </li>
+        <div>
+         <div className="b">mate</div>       
+        <button className="a" onClick={() => alert('click')}>{desc}</button>
+        
+          
+          
+        </div>
       );
     });
     return (
     <div>
-     <button onClick={() => this.hello()}>hello</button>
-      <ol>{moves}</ol>
+     <button onClick={() => this.addStep()}>Add step</button>
+      {steps}
       </div>
      
     );
