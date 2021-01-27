@@ -9,7 +9,7 @@ class Steps extends React.Component {
     this.state = {
      moose: [1, 2],
      currentStepNumber: 2,
-     functions: 'mate'
+     functions: ['mate', 'mate']
     };
     this.handleDropdownChange = this.handleDropdownChange.bind(this);
   }
@@ -23,7 +23,10 @@ class Steps extends React.Component {
   }
   
   handleDropdownChange(e) {
-    this.setState({ functions: e.target.value });
+    const index = e.target.id - 1;
+    const functions = this.state.functions;
+    functions[index] = e.target.value;
+    this.setState({ functions: functions });
   }
 
   render() {
@@ -33,6 +36,7 @@ class Steps extends React.Component {
     const steps = moose.map(thing => {
       const desc = 'Choose function';
       const outputName = 'output ' + thing; 
+      const index = thing - 1;
       return (
 <div>
     <form className = "f" action="/action_page.php">
@@ -41,7 +45,7 @@ class Steps extends React.Component {
 
  
       
-       <div className="f">   <select name="functions" id="functions" onChange={this.handleDropdownChange}>
+       <div className="f">   <select name="functions" id={thing} onChange={this.handleDropdownChange}>
     <option value="Choose function">Choose function</option>
     <option value="Find relevant sentence">Find relevant sentence</option>
     <option value="Word document to text file">Word document to text file</option>
