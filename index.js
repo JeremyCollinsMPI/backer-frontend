@@ -8,8 +8,10 @@ class Steps extends React.Component {
     super(props);
     this.state = {
      moose: [1, 2],
-     currentStepNumber: 2
+     currentStepNumber: 2,
+     functions: 'mate'
     };
+    this.handleDropdownChange = this.handleDropdownChange.bind(this);
   }
   
   addStep() {
@@ -18,6 +20,10 @@ class Steps extends React.Component {
     moose: this.state.moose.concat(currentStepNumber),
     currentStepNumber: currentStepNumber
   })
+  }
+  
+  handleDropdownChange(e) {
+    this.setState({ functions: e.target.value });
   }
 
   render() {
@@ -35,12 +41,15 @@ class Steps extends React.Component {
 
  
       
-       <div className="f"> <button  onClick={() => alert('click')}>{desc}</button></div>
+       <div className="f">   <select name="functions" id="functions" onChange={this.handleDropdownChange}>
+    <option value="Choose function">Choose function</option>
+    <option value="Find relevant sentence">Find relevant sentence</option>
+    <option value="Word document to text file">Word document to text file</option>
+    <option value="Text file to sentence">Text file to sentence</option>
+  </select>  
+       </div>
          <div className="f">{outputName}</div> 
 </div>
-
-
-
 
 
       );
@@ -50,6 +59,7 @@ class Steps extends React.Component {
     <div>
      <button onClick={() => this.addStep()}>Add step</button>
       {steps}
+      
       </div>
 
 <p>Click on the "Add step" button to add steps</p>
