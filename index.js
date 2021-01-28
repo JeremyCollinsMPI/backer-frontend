@@ -10,7 +10,8 @@ class Steps extends React.Component {
      moose: [1],
      currentStepNumber: 1,
      functions: ['mate'],
-     inputs: ['mate']
+     inputs: ['mate'],
+     additionalInputs: ['mate']
     };
     this.handleDropdownChange = this.handleDropdownChange.bind(this);
     this.handleInputDropdownChange = this.handleInputDropdownChange.bind(this);
@@ -40,6 +41,13 @@ class Steps extends React.Component {
 
   }
 
+onFileChange = event => { 
+     
+      // Update the state 
+      this.setState({ selectedFile: event.target.files[0] }); 
+     
+    };
+
   makeInputs(thing) {
     const index = thing - 1;
     const functionName = this.state.functions[index];
@@ -59,11 +67,19 @@ class Steps extends React.Component {
   return(<div className="j">matey</div>)
   }
   
+
+  
   showFileUploadButton(index) {
   if (this.state.inputs[index] == 'Upload file or directory'){
-  return(  <form className = "l" action="/action_page.php">
-  <input type="file" id="myFile" name="filename"></input>
-  </form>)  
+  return(  <form className = "l">
+  <input type="file" onChange={this.onFileChange}></input>
+  </form>
+  
+  
+  
+  
+  
+  )  
   } else {
   return (<div className="k"></div>)
   }  
