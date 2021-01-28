@@ -29,19 +29,40 @@ class Steps extends React.Component {
     this.setState({ functions: functions });
   }
 
+  makeInputs(thing) {
+    const index = thing - 1;
+    const functionName = this.state.functions[index];
+    const inputs = '';
+    if (functionName == "Find relevant sentence") {
+    return(<div> <form className = "g" action="/action_page.php">
+  <input type="file" id="myFile" name="filename"></input>
+</form><div>matey</div></div>) 
+    } else {
+    return( <form className = "f" action="/action_page.php">
+  <input type="file" id="myFile" name="filename"></input>
+</form>)
+    }
+  }
+
+  makeAdditionalInputs() {
+  return(<div className="j">matey</div>)
+  }
+  
   render() {
     const moose = this.state.moose;
 
+    
     
     const steps = moose.map(thing => {
       const desc = 'Choose function';
       const outputName = 'output ' + thing; 
       const index = thing - 1;
+      const additionalInputs = this.makeAdditionalInputs();
       return (
-<div>
-    <form className = "f" action="/action_page.php">
+<div className="h">
+<form className = "f" action="/action_page.php">
   <input type="file" id="myFile" name="filename"></input>
-</form>    
+</form>
 
  
       
@@ -53,6 +74,7 @@ class Steps extends React.Component {
   </select>  
        </div>
          <div className="f">{outputName}</div> 
+         {additionalInputs}
 </div>
 
 
@@ -65,9 +87,9 @@ class Steps extends React.Component {
       {steps}
       
       </div>
-
+<div className="i">
 <p>Click on the "Add step" button to add steps</p>
-  
+</div>
 </div>
     );
   }
