@@ -7,11 +7,14 @@ class Steps extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-     moose: [1, 2],
-     currentStepNumber: 2,
-     functions: ['mate', 'mate']
+     moose: [1],
+     currentStepNumber: 1,
+     functions: ['mate'],
+     inputs: ['mate']
     };
     this.handleDropdownChange = this.handleDropdownChange.bind(this);
+    this.handleInputDropdownChange = this.handleInputDropdownChange.bind(this);
+
   }
   
   addStep() {
@@ -27,6 +30,14 @@ class Steps extends React.Component {
     const functions = this.state.functions;
     functions[index] = e.target.value;
     this.setState({ functions: functions });
+  }
+
+  handleInputDropdownChange(e) {
+    const index = e.target.id - 1;
+    const inputs = this.state.inputs;
+    inputs[index] = e.target.value;
+    this.setState({ inputs: inputs });
+
   }
 
   makeInputs(thing) {
@@ -48,24 +59,42 @@ class Steps extends React.Component {
   return(<div className="j">matey</div>)
   }
   
+  showFileUploadButton(index) {
+  if (this.state.inputs[index] == 'Upload file or directory'){
+  return(  <form className = "l" action="/action_page.php">
+  <input type="file" id="myFile" name="filename"></input>
+  </form>)  
+  } else {
+  return (<div className="k"></div>)
+  }  
+  }
+  
+  makeInputDropdownMenu(thing) {
+  
+  return(
+         <div className="f">   <select name="input" id={thing} onChange={this.handleInputDropdownChange}>
+    <option value="Choose input">Choose input</option>
+    <option value="Upload file or directory">Upload file or directory</option>
+    <option value="Output 1">Output 1</option>
+  </select>  
+       </div>      
+       )
+    }
+  
   render() {
-    const moose = this.state.moose;
-
-    
-    
+    const moose = this.state.moose;  
     const steps = moose.map(thing => {
       const desc = 'Choose function';
       const outputName = 'output ' + thing; 
       const index = thing - 1;
       const additionalInputs = this.makeAdditionalInputs();
+      const inputDropdownMenu = this.makeInputDropdownMenu(thing);
+      const fileUploadButton = this.showFileUploadButton(index);
       return (
 <div className="h">
-<form className = "f" action="/action_page.php">
-  <input type="file" id="myFile" name="filename"></input>
-</form>
 
- 
-      
+       {inputDropdownMenu}
+
        <div className="f">   <select name="functions" id={thing} onChange={this.handleDropdownChange}>
     <option value="Choose function">Choose function</option>
     <option value="Find relevant sentence">Find relevant sentence</option>
@@ -74,7 +103,8 @@ class Steps extends React.Component {
   </select>  
        </div>
          <div className="f">{outputName}</div> 
-         {additionalInputs}
+       {fileUploadButton}
+     
 </div>
 
 
