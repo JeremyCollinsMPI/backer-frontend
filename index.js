@@ -11,11 +11,12 @@ class Steps extends React.Component {
      currentStepNumber: 1,
      functions: ['mate'],
      inputs: ['mate'],
-     additionalInputs: ['mate']
+     additionalInputs: ['mate'],
+     selectedFile: null
     };
     this.handleDropdownChange = this.handleDropdownChange.bind(this);
     this.handleInputDropdownChange = this.handleInputDropdownChange.bind(this);
-
+    this.onFileChange = this.onFileChange.bind(this); 
   }
   
   addStep() {
@@ -41,10 +42,16 @@ class Steps extends React.Component {
 
   }
 
-onFileChange = event => { 
+  onFileChange = event => { 
      
-      // Update the state 
-      this.setState({ selectedFile: event.target.files[0] }); 
+      // Update the state
+      var inputs = this.state.inputs;
+      const index = event.target.id;
+      alert(index);
+      inputs[index] = event.target.files[0];
+      this.setState({ 
+      inputs: inputs,
+      selectedFile: index }); 
      
     };
 
@@ -72,13 +79,8 @@ onFileChange = event => {
   showFileUploadButton(index) {
   if (this.state.inputs[index] == 'Upload file or directory'){
   return(  <form className = "l">
-  <input type="file" onChange={this.onFileChange}></input>
+  <input type="file" id={index} onChange={this.onFileChange}></input>
   </form>
-  
-  
-  
-  
-  
   )  
   } else {
   return (<div className="k"></div>)
@@ -106,6 +108,7 @@ onFileChange = event => {
       const additionalInputs = this.makeAdditionalInputs();
       const inputDropdownMenu = this.makeInputDropdownMenu(thing);
       const fileUploadButton = this.showFileUploadButton(index);
+      var x = this.state.selectedFile;
       return (
 <div className="h">
 
@@ -120,7 +123,7 @@ onFileChange = event => {
        </div>
          <div className="f">{outputName}</div> 
        {fileUploadButton}
-     
+     <div>{x}</div>
 </div>
 
 
