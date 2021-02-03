@@ -10,7 +10,7 @@ class Steps extends React.Component {
      moose: [1],
      currentStepNumber: 1,
      functions: ['mate'],
-     inputs: ['mate'],
+     inputs: [{'type': 'undefined'}],
      additionalInputs: ['mate'],
      selectedFile: null
     };
@@ -23,7 +23,8 @@ class Steps extends React.Component {
   const currentStepNumber = this.state.currentStepNumber + 1;
   this.setState({
     moose: this.state.moose.concat(currentStepNumber),
-    currentStepNumber: currentStepNumber
+    currentStepNumber: currentStepNumber,
+    inputs: this.state.inputs.concat({'type': 'undefined'})
   })
   }
   
@@ -37,47 +38,26 @@ class Steps extends React.Component {
   handleInputDropdownChange(e) {
     const index = e.target.id - 1;
     const inputs = this.state.inputs;
-    inputs[index] = e.target.value;
+    inputs[index]['type'] = e.target.value;
     this.setState({ inputs: inputs });
-
   }
 
   onFileChange = event => { 
-     
-      // Update the state
       var inputs = this.state.inputs;
       const index = event.target.id;
       alert(index);
-      inputs[index] = event.target.files[0];
+      inputs[index]['file'] = event.target.files[0];
       this.setState({ 
       inputs: inputs,
-      selectedFile: index }); 
-     
+      selectedFile: index });     
     };
-
-  makeInputs(thing) {
-    const index = thing - 1;
-    const functionName = this.state.functions[index];
-    const inputs = '';
-    if (functionName == "Find relevant sentence") {
-    return(<div> <form className = "g" action="/action_page.php">
-  <input type="file" id="myFile" name="filename"></input>
-</form><div>matey</div></div>) 
-    } else {
-    return( <form className = "f" action="/action_page.php">
-  <input type="file" id="myFile" name="filename"></input>
-</form>)
-    }
-  }
 
   makeAdditionalInputs() {
   return(<div className="j">matey</div>)
   }
   
-
-  
   showFileUploadButton(index) {
-  if (this.state.inputs[index] == 'Upload file or directory'){
+  if (this.state.inputs[index]['type'] == 'file or directory'){
   return(  <form className = "l">
   <input type="file" id={index} onChange={this.onFileChange}></input>
   </form>
@@ -87,12 +67,11 @@ class Steps extends React.Component {
   }  
   }
   
-  makeInputDropdownMenu(thing) {
-  
+  makeInputDropdownMenu(thing) { 
   return(
          <div className="f">   <select name="input" id={thing} onChange={this.handleInputDropdownChange}>
     <option value="Choose input">Choose input</option>
-    <option value="Upload file or directory">Upload file or directory</option>
+    <option value="file or directory">Upload file or directory</option>
     <option value="Output 1">Output 1</option>
   </select>  
        </div>      
@@ -108,12 +87,10 @@ class Steps extends React.Component {
       const additionalInputs = this.makeAdditionalInputs();
       const inputDropdownMenu = this.makeInputDropdownMenu(thing);
       const fileUploadButton = this.showFileUploadButton(index);
-      var x = this.state.selectedFile;
+      var x = this.state.inputs[0]['type'];
       return (
 <div className="h">
-
        {inputDropdownMenu}
-
        <div className="f">   <select name="functions" id={thing} onChange={this.handleDropdownChange}>
     <option value="Choose function">Choose function</option>
     <option value="Find relevant sentence">Find relevant sentence</option>
@@ -125,8 +102,6 @@ class Steps extends React.Component {
        {fileUploadButton}
      <div>{x}</div>
 </div>
-
-
       );
     });
     return (
