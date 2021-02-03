@@ -7,13 +7,12 @@ class Steps extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-     moose: [1],
+     stepNumbers: [1],
      currentStepNumber: 1,
-     functions: ['mate'],
+     functions: ['undefined'],
      inputs: [{'type': 'undefined'}],
-     additionalInputs: ['mate'],
-     selectedFile: null
-    };
+     additionalInputs: ['undefined']    
+     };
     this.handleDropdownChange = this.handleDropdownChange.bind(this);
     this.handleInputDropdownChange = this.handleInputDropdownChange.bind(this);
     this.onFileChange = this.onFileChange.bind(this); 
@@ -22,7 +21,7 @@ class Steps extends React.Component {
   addStep() {
   const currentStepNumber = this.state.currentStepNumber + 1;
   this.setState({
-    moose: this.state.moose.concat(currentStepNumber),
+    stepNumbers: this.state.stepNumbers.concat(currentStepNumber),
     currentStepNumber: currentStepNumber,
     inputs: this.state.inputs.concat({'type': 'undefined'})
   })
@@ -48,8 +47,7 @@ class Steps extends React.Component {
       alert(index);
       inputs[index]['file'] = event.target.files[0];
       this.setState({ 
-      inputs: inputs,
-      selectedFile: index });     
+      inputs: inputs});     
     };
 
   makeAdditionalInputs() {
@@ -79,9 +77,8 @@ class Steps extends React.Component {
     }
   
   render() {
-    const moose = this.state.moose;  
-    const steps = moose.map(thing => {
-      const desc = 'Choose function';
+    const stepNumbers = this.state.stepNumbers;  
+    const steps = stepNumbers.map(thing => {
       const outputName = 'output ' + thing; 
       const index = thing - 1;
       const additionalInputs = this.makeAdditionalInputs();
