@@ -1,4 +1,2 @@
-rm -f my-app/src/*
-cp moose/* my-app/src/
-cd my-app
+cp /moose/* /my-app/src/
 npm start

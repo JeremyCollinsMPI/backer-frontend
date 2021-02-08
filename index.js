@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-
+import axios from 'axios';
 
 class Steps extends React.Component {
   constructor(props) {
@@ -11,7 +11,8 @@ class Steps extends React.Component {
      currentStepNumber: 1,
      functions: ['undefined'],
      inputs: [{'type': 'undefined'}],
-     additionalInputs: ['undefined']    
+     additionalInputs: ['undefined'],
+     r: ''  
      };
     this.handleDropdownChange = this.handleDropdownChange.bind(this);
     this.handleInputDropdownChange = this.handleInputDropdownChange.bind(this);
@@ -44,7 +45,6 @@ class Steps extends React.Component {
   onFileChange = event => { 
       var inputs = this.state.inputs;
       const index = event.target.id;
-      alert(index);
       inputs[index]['file'] = event.target.files[0];
       this.setState({ 
       inputs: inputs});     
@@ -75,6 +75,18 @@ class Steps extends React.Component {
        </div>      
        )
     }
+    
+  submitFileZero() {
+        const data = new FormData() 
+        data.append('file', this.state.inputs[0]['file']);
+        let url = "http://localhost:8080/text_file_to_sentences";
+        axios.post(url, data, { // receive two parameter endpoint url ,form data 
+        })
+        .then(response => { // then print response status
+            this.setState({"r": response.data.result[0]}) 
+        })
+        
+  }
   
   render() {
     const stepNumbers = this.state.stepNumbers;  
@@ -92,12 +104,12 @@ class Steps extends React.Component {
     <option value="Choose function">Choose function</option>
     <option value="Find relevant sentence">Find relevant sentence</option>
     <option value="Word document to text file">Word document to text file</option>
-    <option value="Text file to sentence">Text file to sentence</option>
+    <option value="Text file to sentences">Text file to sentences</option>
+    <option value="Find sentences with string">Find sentences with string</option>
   </select>  
        </div>
          <div className="f">{outputName}</div> 
        {fileUploadButton}
-     <div>{x}</div>
 </div>
       );
     });
@@ -106,10 +118,13 @@ class Steps extends React.Component {
     <div>
      <button onClick={() => this.addStep()}>Add step</button>
       {steps}
-      
+      <button onClick={() => this.submitFileZero()}>Submit</button>
       </div>
 <div className="i">
 <p>Click on the "Add step" button to add steps</p>
+</div>
+<div className="i">
+<p>{this.state.r}</p>
 </div>
 </div>
     );
