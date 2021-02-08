@@ -76,26 +76,25 @@ class Steps extends React.Component {
        )
     } 
   
-  textFileToSentences() {
-    alert('mate');
+  textFileToSentences(index) {
+       const data = new FormData() 
+       data.append('file', this.state.inputs[index]['file']);
+       let url = "http://localhost:8080/text_file_to_sentences";
+       axios.post(url, data, { // receive two parameter endpoint url ,form data 
+       })
+       .then(response => { // then print response status
+           this.setState({"r": response.data.result[0]}) 
+       })
   }
   
   submitStep(index) {
     if(this.state.functions[index] == 'Text file to sentences') {
-      this.textFileToSentences()
+      this.textFileToSentences(index)
     }
   }
   
   submit() {
     this.submitStep(0);
-//        const data = new FormData() 
-//        data.append('file', this.state.inputs[0]['file']);
-//        let url = "http://localhost:8080/text_file_to_sentences";
-//        axios.post(url, data, { // receive two parameter endpoint url ,form data 
-//        })
-//        .then(response => { // then print response status
-//            this.setState({"r": response.data.result[0]}) 
-//        })
         
   }
   
