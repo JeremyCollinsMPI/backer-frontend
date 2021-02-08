@@ -74,17 +74,28 @@ class Steps extends React.Component {
   </select>  
        </div>      
        )
+    } 
+  
+  textFileToSentences() {
+    alert('mate');
+  }
+  
+  submitStep(index) {
+    if(this.state.functions[index] == 'Text file to sentences') {
+      this.textFileToSentences()
     }
-    
-  submitFileZero() {
-        const data = new FormData() 
-        data.append('file', this.state.inputs[0]['file']);
-        let url = "http://localhost:8080/text_file_to_sentences";
-        axios.post(url, data, { // receive two parameter endpoint url ,form data 
-        })
-        .then(response => { // then print response status
-            this.setState({"r": response.data.result[0]}) 
-        })
+  }
+  
+  submit() {
+    this.submitStep(0);
+//        const data = new FormData() 
+//        data.append('file', this.state.inputs[0]['file']);
+//        let url = "http://localhost:8080/text_file_to_sentences";
+//        axios.post(url, data, { // receive two parameter endpoint url ,form data 
+//        })
+//        .then(response => { // then print response status
+//            this.setState({"r": response.data.result[0]}) 
+//        })
         
   }
   
@@ -118,7 +129,7 @@ class Steps extends React.Component {
     <div>
      <button onClick={() => this.addStep()}>Add step</button>
       {steps}
-      <button onClick={() => this.submitFileZero()}>Submit</button>
+      <button onClick={() => this.submit()}>Submit</button>
       </div>
 <div className="i">
 <p>Click on the "Add step" button to add steps</p>
