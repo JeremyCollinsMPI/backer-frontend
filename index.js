@@ -12,7 +12,7 @@ class Steps extends React.Component {
      functions: ['undefined'],
      inputs: [{'type': 'undefined'}],
      additionalInputs: [{'type': 'undefined'}],
-     r: '',
+     r: {'result': []},
      id: 123	
      };
     this.handleDropdownChange = this.handleDropdownChange.bind(this);
@@ -117,21 +117,24 @@ class Steps extends React.Component {
 //   }
 
 
-//   submitFile(index) {
-//   const data = new FormData()
-//   data.append('file', this.state.inputs[index])
-//   let id = this.state.id;
-//   let step = index;
-//   let url = "http://localhost:8080/accept_file?id=" + id + "&step=" + step;
-//     
-//   }
+  submitFile(index) {
+  const data = new FormData()
+  data.append('file', this.state.inputs[index]['file'])
+  let id = this.state.id;
+  let step = index;
+  let url = "http://localhost:8080/accept_file?id=" + id + "&step=" + index;
+  axios.post(url, data);
+    
+  }
 
-//   submitFiles {
-//     
-//   
-// //   need to submit for every index
-//   this.submitFile(index);
-//   }
+  submitFiles() {
+    var i;
+    for (i = 0; i < this.state.inputs.length; i++) {
+      if(this.state.inputs[i].type == 'file or directory'){
+        this.submitFile(i);
+      }
+    }
+  }
  
   submitSteps() {
 //     you are calling a general api.  
@@ -167,14 +170,14 @@ class Steps extends React.Component {
   let url = "http://localhost:8080/run";
   const data = new FormData()
   data.append('id', this.state.id)
-  axios.get(url, data).then(response => {this.setState({"r": response.data.result[0]})}) 
+  axios.get(url, data).then(response => {this.setState({"r": response.data})}) 
   }
   
   submit() {
 // redoing this
 // the idea is that you submit the data in state, and any files.
   this.submitSteps();
-//   this.submitFiles();
+  this.submitFiles();
   this.submitRun();
   }
   
@@ -197,14 +200,22 @@ class Steps extends React.Component {
     <option value="Text file to sentences">Text file to sentences</option>
     <option value="Find sentences with string">Find sentences with string</option>
   </select>  
-       </div>
-         <div className="f">{outputName}</div> 
+
+         <div className="p">{outputName}</div> 
+</div>
        {fileUploadButton}
        {additionalInputs}
 </div>
       );
     });
     console.log(this.state.additionalInputs);
+    const resultList = this.state.r.result;
+    const result = resultList.map(thing => {
+    return (
+    <div>{thing}</div>    
+    );
+    }
+    );
     return (
 <div>
     <div>
@@ -216,7 +227,7 @@ class Steps extends React.Component {
 <p>Click on the "Add step" button to add steps</p>
 </div>
 <div className="i">
-<p>{this.state.r}</p>
+<p>{result}</p>
 </div>
 </div>
     );
