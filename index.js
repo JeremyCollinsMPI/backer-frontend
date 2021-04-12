@@ -64,7 +64,10 @@ class Steps extends React.Component {
 
   makeAdditionalInputs(index) {
   console.log(this.state.functions[index])
-  if (this.state.functions[index] == "Find sentences with string"){
+  let example_array = ["Find sentences with string", "Get sentences from CSV"];
+  console.log(example_array);
+  console.log(example_array.includes(this.state.functions[index]));
+  if (example_array.includes(this.state.functions[index])){
     return(<div className="l"><input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
     } else {
     return(<div className="k"></div>)
@@ -117,26 +120,26 @@ class Steps extends React.Component {
 //   }
 
 
-  submitFile(index) {
+  async submitFile(index) {
   const data = new FormData()
   data.append('file', this.state.inputs[index]['file'])
   let id = this.state.id;
   let step = index;
   let url = "http://localhost:8080/accept_file?id=" + id + "&step=" + index;
-  axios.post(url, data);
+  await axios.post(url, data);
     
   }
 
-  submitFiles() {
+  async submitFiles() {
     var i;
     for (i = 0; i < this.state.inputs.length; i++) {
       if(this.state.inputs[i].type == 'file or directory'){
-        this.submitFile(i);
+        await this.submitFile(i);
       }
     }
   }
  
-  submitSteps() {
+  async submitSteps() {
 //     you are calling a general api.  
 //     const data = new FormData()
 //     if(this.state.inputs[0]['type'] == 'file or directory'){
@@ -147,7 +150,7 @@ class Steps extends React.Component {
 //     data.append('state', 'monkey')
     let data = {'state': this.state}
     let url = "http://localhost:8080/accept_steps?id=" + this.state.id;
-       axios.post(url, data).then((response) => {
+       await axios.post(url, data).then((response) => {
   console.log(response);
   }, (error) => {
   console.log(error);
@@ -166,19 +169,26 @@ class Steps extends React.Component {
 
   
   
-  submitRun() {
-  let url = "http://localhost:8080/run";
-  const data = new FormData()
-  data.append('id', this.state.id)
-  axios.get(url, data).then(response => {this.setState({"r": response.data})}) 
+  async submitRun() {
+  let url = "http://localhost:8080/run?id=" + this.state.id;
+  axios.get(url).then(response => {this.setState({"r": response.data})}) 
   }
   
-  submit() {
+  async submit() {
 // redoing this
 // the idea is that you submit the data in state, and any files.
-  this.submitSteps();
-  this.submitFiles();
-  this.submitRun();
+
+  let x = await this.submitSteps();
+  console.log(x);
+  let y = await this.submitFiles();
+  console.log(y);
+  let z = await this.submitRun();
+
+//   this.submitSteps().then(console.log('done1')).then(this.submitFiles()).then(console.log('done2')).then(this.submitRun()).then(console.log('done3'));
+//   console.log('moose1');
+//   let y = await this.submitFiles();
+//   console.log(y);
+//   let z = await this.submitRun();
   }
   
   render() {
@@ -195,10 +205,13 @@ class Steps extends React.Component {
        {inputDropdownMenu}
        <div className="f">   <select name="functions" id={thing} onChange={this.handleDropdownChange}>
     <option value="Choose function">Choose function</option>
+    <option value="Get sentences from CSV">Get sentences from CSV</option>
+    <option value="Contains mention of">Contains mention of</option>
     <option value="Find relevant sentence">Find relevant sentence</option>
     <option value="Word document to text file">Word document to text file</option>
     <option value="Text file to sentences">Text file to sentences</option>
     <option value="Find sentences with string">Find sentences with string</option>
+    
   </select>  
 
          <div className="p">{outputName}</div> 
