@@ -73,9 +73,12 @@ class Steps extends React.Component {
 
   makeAdditionalInputs(index) {
   console.log(this.state.functions[index])
-  let example_array = ["Find sentences with string", "Get sentences from CSV", "Semantic search"];
+  let example_array = ["Find sentences with string", "Semantic search"];
   console.log(example_array);
   console.log(example_array.includes(this.state.functions[index]));
+  if(this.state.functions[index] == "Get sentences from CSV"){
+    return(<div className="l">Column name:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
+  }
   if (example_array.includes(this.state.functions[index])){
     return(<div className="l"><input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
     } else {
