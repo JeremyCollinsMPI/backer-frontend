@@ -133,7 +133,7 @@ class Steps extends React.Component {
   data.append('file', this.state.inputs[index]['file'])
   let id = this.state.id;
   let step = index;
-  let url = "http://localhost:8080/accept_file?id=" + id + "&step=" + index;
+  let url = "http://0.0.0.0:8080/accept_file?id=" + id + "&step=" + index;
   await axios.post(url, data);
     
   }
@@ -157,7 +157,7 @@ class Steps extends React.Component {
 // if there are additional inputs, then you need these too.
 //     data.append('state', 'monkey')
     let data = {'state': this.state}
-    let url = "http://localhost:8080/accept_steps?id=" + this.state.id;
+    let url = "http://0.0.0.0:8080/accept_steps?id=" + this.state.id;
        await axios.post(url, data).then((response) => {
   console.log(response);
   }, (error) => {
@@ -178,7 +178,7 @@ class Steps extends React.Component {
   
   
   async submitRun() {
-  let url = "http://localhost:8080/run?id=" + this.state.id;
+  let url = "http://0.0.0.0:8080/run?id=" + this.state.id;
   axios.get(url).then(response => {this.setState({"r": response.data})}) 
   }
   
