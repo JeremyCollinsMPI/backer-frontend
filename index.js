@@ -41,7 +41,15 @@ class Steps extends React.Component {
   handleInputDropdownChange(e) {
     const index = e.target.id;
     const inputs = this.state.inputs;
-    inputs[index]['type'] = e.target.value;
+    inputs[index]['name'] = e.target.value;
+    if (inputs[index]['name'] === 'file or directory') {
+      inputs[index]['type'] = 'file or directory'
+    }
+    if (inputs[index]['name'].includes('Output')) {
+      inputs[index]['type'] = 'Output';
+      inputs[index]['index'] = inputs[index]['name'].replace('Output ', '');
+      inputs[index]['index'] = parseInt(inputs[index]['index']) - 1;
+    }    
     this.setState({ inputs: inputs });
   }
 
@@ -64,7 +72,7 @@ class Steps extends React.Component {
 
   makeAdditionalInputs(index) {
   console.log(this.state.functions[index])
-  let example_array = ["Find sentences with string", "Get sentences from CSV"];
+  let example_array = ["Find sentences with string", "Get sentences from CSV", "Semantic search"];
   console.log(example_array);
   console.log(example_array.includes(this.state.functions[index]));
   if (example_array.includes(this.state.functions[index])){
@@ -206,7 +214,7 @@ class Steps extends React.Component {
        <div className="f">   <select name="functions" id={thing} onChange={this.handleDropdownChange}>
     <option value="Choose function">Choose function</option>
     <option value="Get sentences from CSV">Get sentences from CSV</option>
-    <option value="Contains mention of">Contains mention of</option>
+    <option value="Semantic search">Semantic search</option>
     <option value="Find relevant sentence">Find relevant sentence</option>
     <option value="Word document to text file">Word document to text file</option>
     <option value="Text file to sentences">Text file to sentences</option>
