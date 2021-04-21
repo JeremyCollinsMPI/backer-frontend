@@ -14,7 +14,8 @@ class Steps extends React.Component {
      inputs: [{'type': 'undefined'}],
      additionalInputs: [{'type': 'undefined'}],
      r: {'result': []},
-     id: 123	
+     id: 123,
+     in_progress: false
      };
     this.handleDropdownChange = this.handleDropdownChange.bind(this);
     this.handleInputDropdownChange = this.handleInputDropdownChange.bind(this);
@@ -183,18 +184,20 @@ class Steps extends React.Component {
   
   async submitRun() {
   let url = this.ip + ":8080/run?id=" + this.state.id;
-  axios.get(url).then(response => {this.setState({"r": response.data})}) 
+  await axios.get(url).then(response => {this.setState({"r": response.data})}); 
   }
   
   async submit() {
 // redoing this
 // the idea is that you submit the data in state, and any files.
-
+  this.setState({"in_progress": true});
+  this.setState({"r": {'result': []}});
   let x = await this.submitSteps();
   console.log(x);
   let y = await this.submitFiles();
   console.log(y);
-  let z = this.submitRun();
+  let z = await this.submitRun();
+  this.setState({"in_progress": false});
 
 //   this.submitSteps().then(console.log('done1')).then(this.submitFiles()).then(console.log('done2')).then(this.submitRun()).then(console.log('done3'));
 //   console.log('moose1');
@@ -239,6 +242,10 @@ class Steps extends React.Component {
     if(resultList.length > 0){
       resultHeader = 'Result:'
     }
+    let inProgressHeader = '';
+    if (this.state.in_progress){
+      inProgressHeader = "In progress";
+    }
     const result = resultList.map(thing => {
     return (
     <div>{thing}</div>    
@@ -255,8 +262,9 @@ class Steps extends React.Component {
 <div className="i">
 <p>Click on the "Add step" button to add steps</p>
 </div>
-<div className="i">
+<p>{inProgressHeader}</p>
 <p>{resultHeader}</p>
+<div className="i">
 <p>{result}</p>
 </div>
 </div>
