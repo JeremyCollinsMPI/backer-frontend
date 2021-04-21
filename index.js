@@ -136,6 +136,7 @@ class Steps extends React.Component {
   }, (error) => {
   console.log(error);
   });
+  }
     
   async submitRun() {
   let url = this.ip + ":8080/run?id=" + this.state.id;
