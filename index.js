@@ -190,7 +190,7 @@ class Steps extends React.Component {
   console.log(x);
   let y = await this.submitFiles();
   console.log(y);
-  let z = await this.submitRun();
+  let z = this.submitRun();
 
 //   this.submitSteps().then(console.log('done1')).then(this.submitFiles()).then(console.log('done2')).then(this.submitRun()).then(console.log('done3'));
 //   console.log('moose1');
@@ -231,6 +231,10 @@ class Steps extends React.Component {
     });
     console.log(this.state.additionalInputs);
     const resultList = this.state.r.result;
+    let resultHeader = '';
+    if(resultList.length > 0){
+      resultHeader = 'Result:'
+    }
     const result = resultList.map(thing => {
     return (
     <div>{thing}</div>    
@@ -248,6 +252,7 @@ class Steps extends React.Component {
 <p>Click on the "Add step" button to add steps</p>
 </div>
 <div className="i">
+<p>{resultHeader}</p>
 <p>{result}</p>
 </div>
 </div>
