@@ -108,30 +108,6 @@ class Steps extends React.Component {
        </div>      
        )
     } 
-  
-//   textFileToSentences(index) {
-//        const data = new FormData() 
-//        data.append('file', this.state.inputs[index]['file']);
-//        let url = "http://localhost:8080/text_file_to_sentences";
-//        axios.post(url, data, { // receive two parameter endpoint url ,form data 
-//        })
-//        .then(response => { // then print response status
-//            this.setState({"r": response.data.result[0]}) 
-//        })
-//   }
-
-//   findSentencesWithString(index) {
-//     const data = new FormData()
-//     data.append({'sentences': })
-//     data.append({
-//     let url = "http://localhost:8080/search_for";
-//        axios.post(url, data, { // receive two parameter endpoint url ,form data 
-//        })
-//        .then(response => { // then print response status
-//            this.setState({"r": response.data.result[0]}) 
-//        })
-//   }
-
 
   async submitFile(index) {
   const data = new FormData()
@@ -153,14 +129,6 @@ class Steps extends React.Component {
   }
  
   async submitSteps() {
-//     you are calling a general api.  
-//     const data = new FormData()
-//     if(this.state.inputs[0]['type'] == 'file or directory'){
-//       data.append('file', this.state.inputs[index]['file'])
-
-//     if it is the name of an output, then give the name
-// if there are additional inputs, then you need these too.
-//     data.append('state', 'monkey')
     let data = {'state': this.state}
     let url = this.ip + ":8080/accept_steps?id=" + this.state.id;
        await axios.post(url, data).then((response) => {
@@ -168,28 +136,13 @@ class Steps extends React.Component {
   }, (error) => {
   console.log(error);
   });
-  
-  
-//     if(this.state.functions[index] == 'Text file to sentences') {
-//       this.textFileToSentences(index)
-//     }
-//     if(this.state.functions[index] == 'Find sentences with string') {
-//       this.findSentencesWithString(index)
-//     }
-  }
-  
-  
-
-  
-  
+    
   async submitRun() {
   let url = this.ip + ":8080/run?id=" + this.state.id;
   await axios.get(url).then(response => {this.setState({"r": response.data})}); 
   }
   
   async submit() {
-// redoing this
-// the idea is that you submit the data in state, and any files.
   this.setState({"in_progress": true});
   this.setState({"r": {'result': []}});
   let x = await this.submitSteps();
@@ -198,12 +151,6 @@ class Steps extends React.Component {
   console.log(y);
   let z = await this.submitRun();
   this.setState({"in_progress": false});
-
-//   this.submitSteps().then(console.log('done1')).then(this.submitFiles()).then(console.log('done2')).then(this.submitRun()).then(console.log('done3'));
-//   console.log('moose1');
-//   let y = await this.submitFiles();
-//   console.log(y);
-//   let z = await this.submitRun();
   }
   
   render() {
