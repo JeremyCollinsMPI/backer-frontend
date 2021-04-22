@@ -80,6 +80,9 @@ class Steps extends React.Component {
   if(this.state.functions[index] == "Get sentences from CSV"){
     return(<div className="l">Column name:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
   }
+  if(this.state.functions[index] == "Entails"){
+    return(<div className="l">Hypothesis:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
+  }  
   if (example_array.includes(this.state.functions[index])){
     return(<div className="l"><input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
     } else {
@@ -174,7 +177,7 @@ class Steps extends React.Component {
     <option value="Word document to text file">Word document to text file</option>
     <option value="Text file to sentences">Text file to sentences</option>
     <option value="Find sentences with string">Find sentences with string</option>
-    
+    <option value="Entails">Entails</option>
   </select>  
 
          <div className="p">{outputName}</div> 
