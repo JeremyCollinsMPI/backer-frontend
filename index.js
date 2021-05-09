@@ -81,13 +81,13 @@ class Steps extends React.Component {
     return(<div className="l">Column name:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
   }
   if(this.state.functions[index] == "Entails"){
-    return(<div className="l">Hypothesis:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
+    return(<div className="l">Hypothesis:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange}></input></div>)
   }  
   if(this.state.functions[index] == "Get sentences from url"){
     return(<div className="l">Url:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
   }  
   if(this.state.functions[index] == "Ask question"){
-    return(<div className="l">Question:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
+    return(<div className="l">Question:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange}></input></div>)
   }  
   if (example_array.includes(this.state.functions[index])){
     return(<div className="l"><input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
