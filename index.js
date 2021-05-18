@@ -38,6 +38,8 @@ class Steps extends React.Component {
     const functions = this.state.functions;
     functions[index] = e.target.value;
     this.setState({ functions: functions });
+    let url = this.ip + ":8080/wake_up_gcp";
+    axios.get(url);
   }
 
   handleInputDropdownChange(e) {
@@ -81,7 +83,13 @@ class Steps extends React.Component {
     return(<div className="l">Column name:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
   }
   if(this.state.functions[index] == "Entails"){
-    return(<div className="l">Hypothesis:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
+    return(<div className="l">Hypothesis:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange}></input></div>)
+  }  
+  if(this.state.functions[index] == "Get sentences from url"){
+    return(<div className="l">Url:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
+  }  
+  if(this.state.functions[index] == "Ask question"){
+    return(<div className="l">Question:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange}></input></div>)
   }  
   if (example_array.includes(this.state.functions[index])){
     return(<div className="l"><input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
@@ -107,6 +115,7 @@ class Steps extends React.Component {
     <option value="Choose input">Choose input</option>
     <option value="file or directory">Upload file or directory</option>
     <option value="Output 1">Output 1</option>
+    <option value="Output 2">Output 2</option>
   </select>  
        </div>      
        )
@@ -178,6 +187,8 @@ class Steps extends React.Component {
     <option value="Text file to sentences">Text file to sentences</option>
     <option value="Find sentences with string">Find sentences with string</option>
     <option value="Entails">Entails</option>
+    <option value="Get sentences from url">Get sentences from url</option>
+    <option value="Ask question">Ask question</option>
   </select>  
 
          <div className="p">{outputName}</div> 
