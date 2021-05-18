@@ -38,6 +38,8 @@ class Steps extends React.Component {
     const functions = this.state.functions;
     functions[index] = e.target.value;
     this.setState({ functions: functions });
+    let url = this.ip + ":8080/wake_up_gcp";
+    axios.get(url);
   }
 
   handleInputDropdownChange(e) {
