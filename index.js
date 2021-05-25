@@ -189,6 +189,7 @@ class Steps extends React.Component {
     <option value="Entails">Entails</option>
     <option value="Get sentences from url">Get sentences from url</option>
     <option value="Ask question">Ask question</option>
+    <option value="Make api link">Make api link</option>
   </select>  
 
          <div className="p">{outputName}</div> 
