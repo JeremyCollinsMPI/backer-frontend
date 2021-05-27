@@ -54,6 +54,9 @@ class Steps extends React.Component {
       inputs[index]['index'] = inputs[index]['name'].replace('Output ', '');
       inputs[index]['index'] = parseInt(inputs[index]['index']) - 1;
     }    
+    if (inputs[index]['name'] == 'Api input'){
+      inputs[index]['type'] = 'Api input';
+    }
     this.setState({ inputs: inputs });
   }
 
@@ -116,6 +119,7 @@ class Steps extends React.Component {
     <option value="file or directory">Upload file or directory</option>
     <option value="Output 1">Output 1</option>
     <option value="Output 2">Output 2</option>
+    <option value="Api input">Api input</option>
   </select>  
        </div>      
        )
