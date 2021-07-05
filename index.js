@@ -113,14 +113,14 @@ class Steps extends React.Component {
   if(this.state.functions[index] == "Ask question"){
     return(<div className="l">Question:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange}></input></div>)
   }  
+  if(this.state.functions[index] == "Union of outputs"){
+    return(<div className="l">Outputs:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange}></input></div>)
+  }  
   if (example_array.includes(this.state.functions[index])){
     return(<div className="l"><input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
     } else {
     return(<div className="k"></div>)
   }
-  if(this.state.functions[index] == "Union of outputs"){
-    return(<div className="l">Outputs:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange}></input></div>)
-  }  
   }
   
   showFileUploadButton(index) {
