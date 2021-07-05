@@ -21,6 +21,7 @@ class Steps extends React.Component {
     this.handleInputDropdownChange = this.handleInputDropdownChange.bind(this);
     this.onFileChange = this.onFileChange.bind(this); 
     this.handleAdditionalInputChange = this.handleAdditionalInputChange.bind(this);
+    this.handleAdditionalInputChangeMore = this.handleAdditionalInputChangeMore.bind(this)
   }
   
   addStep() {
@@ -76,6 +77,13 @@ class Steps extends React.Component {
     this.setState({additionalInputs: additionalInputs});
   }
 
+  handleAdditionalInputChangeMore(e) {
+    const index = e.target.id;
+    var additionalInputs = this.state.additionalInputs;
+    const value = e.target.value;
+    additionalInputs[index]['more'] = [{'type': 'text', 'text': value}];
+    this.setState({additionalInputs: additionalInputs});
+  }
 
   makeAdditionalInputs(index) {
   console.log(this.state.functions[index])
@@ -84,6 +92,17 @@ class Steps extends React.Component {
   console.log(example_array.includes(this.state.functions[index]));
   if(this.state.functions[index] == "Get sentences from CSV"){
     return(<div className="l">Column name:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
+  }
+  if(this.state.functions[index] == "Get labels"){
+    return(
+    <div className="l">Label column name:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
+  }
+  if(this.state.functions[index] == "Compare with labels"){
+    return(
+    <div>
+    <div className="l">Label output to ause:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>
+    <div className="l">Text output to use:<input type="text" id={index} onChange={this.handleAdditionalInputChangeMore}></input></div>
+    </div>)
   }
   if(this.state.functions[index] == "Entails"){
     return(<div className="l">Hypothesis:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange}></input></div>)
@@ -99,6 +118,9 @@ class Steps extends React.Component {
     } else {
     return(<div className="k"></div>)
   }
+  if(this.state.functions[index] == "Union of outputs"){
+    return(<div className="l">Outputs:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange}></input></div>)
+  }  
   }
   
   showFileUploadButton(index) {
@@ -119,6 +141,7 @@ class Steps extends React.Component {
     <option value="file or directory">Upload file or directory</option>
     <option value="Output 1">Output 1</option>
     <option value="Output 2">Output 2</option>
+    <option value="Output 3">Output 3</option>
     <option value="Api input">Api input</option>
   </select>  
        </div>      
@@ -193,6 +216,9 @@ class Steps extends React.Component {
     <option value="Entails">Entails</option>
     <option value="Get sentences from url">Get sentences from url</option>
     <option value="Ask question">Ask question</option>
+    <option value="Get labels">Get labels</option>
+    <option value="Compare with labels">Compare with labels</option>
+    <option value="Union of outputs">Union of outputs</option>
     <option value="Make api link">Make api link</option>
   </select>  
 
