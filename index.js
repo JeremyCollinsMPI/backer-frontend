@@ -21,7 +21,9 @@ class Steps extends React.Component {
     this.handleInputDropdownChange = this.handleInputDropdownChange.bind(this);
     this.onFileChange = this.onFileChange.bind(this); 
     this.handleAdditionalInputChange = this.handleAdditionalInputChange.bind(this);
-    this.handleAdditionalInputChangeMore = this.handleAdditionalInputChangeMore.bind(this)
+    this.handleAdditionalInputChangeMore = this.handleAdditionalInputChangeMore.bind(this);
+    this.onTextChange = this.onTextChange.bind(this);
+    this.showTextInput = this.showTextInput.bind(this);
   }
   
   addStep() {
@@ -32,6 +34,8 @@ class Steps extends React.Component {
     inputs: this.state.inputs.concat({'type': 'undefined'}),
     additionalInputs: this.state.additionalInputs.concat({'type': 'undefined'})
   })
+  let url = this.ip + ":8080/wake_up_gcp";
+  axios.get(url);
   }
   
   handleDropdownChange(e) {
@@ -39,8 +43,6 @@ class Steps extends React.Component {
     const functions = this.state.functions;
     functions[index] = e.target.value;
     this.setState({ functions: functions });
-    let url = this.ip + ":8080/wake_up_gcp";
-    axios.get(url);
   }
 
   handleInputDropdownChange(e) {
@@ -58,6 +60,9 @@ class Steps extends React.Component {
     if (inputs[index]['name'] == 'Api input'){
       inputs[index]['type'] = 'Api input';
     }
+    if (inputs[index]['name'] == 'Text input'){
+      inputs[index]['type'] = 'Text input';
+    }
     this.setState({ inputs: inputs });
   }
 
@@ -67,6 +72,13 @@ class Steps extends React.Component {
       inputs[index]['file'] = event.target.files[0];
       this.setState({ 
       inputs: inputs});     
+    };
+
+  onTextChange = event => { 
+      var inputs = this.state.inputs;
+      const index = event.target.id;
+      inputs[index]['text'] = event.target.value;
+      this.setState({inputs: inputs});    
     };
 
   handleAdditionalInputChange(e) {
@@ -100,10 +112,27 @@ class Steps extends React.Component {
   if(this.state.functions[index] == "Compare with labels"){
     return(
     <div>
-    <div className="l">Label output to ause:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>
+    <div className="l">Label output to use:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>
     <div className="l">Text output to use:<input type="text" id={index} onChange={this.handleAdditionalInputChangeMore}></input></div>
     </div>)
   }
+  if(this.state.functions[index] == "Get intents and examples"){
+    return(
+    <div>
+    <div className="l">Example column name:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>
+    <div className="l">Intent column name:<input type="text" id={index} onChange={this.handleAdditionalInputChangeMore}></input></div>
+    </div>)
+  }
+  if(this.state.functions[index] == "Compare two label dicts"){
+    return(
+    <div>
+    <div className="l">Label output number:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>
+    <div className="l">Confidence threshold:<input type="text" id={index} onChange={this.handleAdditionalInputChangeMore}></input></div>
+    </div>)
+  }
+  if(this.state.functions[index] == "Classify intent"){
+    return(<div className="l">Intents and examples input:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange}></input></div>)
+  }  
   if(this.state.functions[index] == "Entails"){
     return(<div className="l">Hypothesis:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange}></input></div>)
   }  
@@ -113,9 +142,22 @@ class Steps extends React.Component {
   if(this.state.functions[index] == "Ask question"){
     return(<div className="l">Question:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange}></input></div>)
   }  
+  if(this.state.functions[index] == "Random sample from array"){
+    return(<div className="l">Sample size<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange}></input></div>)
+  }   
   if(this.state.functions[index] == "Union of outputs"){
     return(<div className="l">Outputs:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange}></input></div>)
-  }  
+  }
+  if(this.state.functions[index] == "Classify intent with array input"){
+    return(<div className="l">Intents and examples input:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange}></input></div>)
+  }      
+  if(this.state.functions[index] == "Get label dict"){
+    return(
+    <div>
+    <div className="l">Text column name:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>
+    <div className="l">Label column name:<input type="text" id={index} onChange={this.handleAdditionalInputChangeMore}></input></div>
+    </div>)
+  }
   if (example_array.includes(this.state.functions[index])){
     return(<div className="l"><input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
     } else {
@@ -134,15 +176,37 @@ class Steps extends React.Component {
   }  
   }
   
+  
+  showTextInput(index) {
+  if (this.state.inputs[index]['type'] == 'Text input')
+    {
+    return(<form className="l"><input type="text" id={index} onChange={this.onTextChange}></input></form>)
+    }  
+  else{ return (<div className="k"></div>)
+  }
+  }
+  
   makeInputDropdownMenu(thing) { 
+  const array1 = ["Choose input", "file or directory", "Text input", "Api input"]
+  const array2 = this.state.stepNumbers.map(function(stepNumber){
+    return ('Output ' + (stepNumber+1).toString())
+  });
+  const array3 = array1.concat(array2);
+  function mapName(name) {
+    if(name=='file or directory'){
+    return('Upload file or directory')
+    }
+    else{
+    return(name)
+    }
+  }
+  const array4 = array3.map(function(item){
+  return(<option value={item}>{mapName(item)}</option>)
+  }
+  );
   return(
          <div className="f">   <select name="input" id={thing} onChange={this.handleInputDropdownChange}>
-    <option value="Choose input">Choose input</option>
-    <option value="file or directory">Upload file or directory</option>
-    <option value="Output 1">Output 1</option>
-    <option value="Output 2">Output 2</option>
-    <option value="Output 3">Output 3</option>
-    <option value="Api input">Api input</option>
+  {array4}
   </select>  
        </div>      
        )
@@ -201,6 +265,7 @@ class Steps extends React.Component {
       const additionalInputs = this.makeAdditionalInputs(index);
       const inputDropdownMenu = this.makeInputDropdownMenu(thing);
       const fileUploadButton = this.showFileUploadButton(index);
+      const textInput = this.showTextInput(index);
       var x = this.state.inputs[0]['type'];
       return (
 <div className="h">
@@ -219,12 +284,19 @@ class Steps extends React.Component {
     <option value="Get labels">Get labels</option>
     <option value="Compare with labels">Compare with labels</option>
     <option value="Union of outputs">Union of outputs</option>
+    <option value="Get intents and examples">Get intents and examples</option>
+    <option value="Classify intent">Classify intent</option>
+    <option value="Get label dict">Get label dict</option>
+    <option value="Classify intent with array input">Classify intent with array input</option>
+    <option value="Compare two label dicts">Compare two label dicts</option>
+    <option value="Random sample from array">Random sample from array</option>
     <option value="Make api link">Make api link</option>
   </select>  
 
          <div className="p">{outputName}</div> 
 </div>
        {fileUploadButton}
+       {textInput}
        {additionalInputs}
 </div>
       );
