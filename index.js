@@ -319,6 +319,32 @@ class Steps extends React.Component {
     );
     return (
 <div>
+<div>
+<p>
+Backer is a platform for NLP tasks which aims to minimise the amount of work and coding to integrate models and sources of data. 
+</p>
+<p>
+Simply construct a flow below by pressing the 'Add step' button to add a step, which can introduce a new data source (e.g. a directory you upload, a video, an image, a website, etc.), or carry out a new task.
+</p>
+<p>
+Each step produces an output which is used as a possible input for later steps. 
+</p>
+<p>
+The final output of the flow is printed at the bottom of the page, or can be downloaded in different formats, depending on the last step you choose. 
+</p>
+<p>
+You can even make the flow into an api, by choosing the 'Make api link'. 
+</p>
+<p>
+Save your flow and allow other people to use it by pressing the 'Save flow' button. 
+</p>
+<p>
+Train a new model on the 'Train model' page, which can then be used to do a new NLP task.
+</p>
+<p>
+For demos, look at the 'Flows' page. 
+</p>
+</div>
     <div>
      <button onClick={() => this.addStep()}>Add step</button>
       {steps}
