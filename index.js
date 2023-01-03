@@ -140,7 +140,11 @@ class Steps extends React.Component {
     return(<div className="l">Url:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
   }  
   if(this.state.functions[index] == "Ask question"){
-    return(<div className="l">Question:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange}></input></div>)
+    return(
+    <div>
+    <div className="l">Question:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange}></input></div>)
+    <div className="l">Model [choose from the Models page]:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChangeMore}></input></div>)
+    </div>
   }  
   if(this.state.functions[index] == "Random sample from array"){
     return(<div className="l">Sample size<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange}></input></div>)
@@ -272,6 +276,7 @@ class Steps extends React.Component {
        {inputDropdownMenu}
        <div className="f">   <select name="functions" id={thing} onChange={this.handleDropdownChange}>
     <option value="Choose function">Choose function</option>
+    <option value="Classify">Classify</option>
     <option value="Get sentences from CSV">Get sentences from CSV</option>
     <option value="Semantic search">Semantic search</option>
     <option value="Find relevant sentence">Find relevant sentence</option>
@@ -333,7 +338,7 @@ Each step produces an output which is used as a possible input for later steps.
 The final output of the flow is printed at the bottom of the page, or can be downloaded in different formats, depending on the last step you choose. 
 </p>
 <p>
-You can even make the flow into an api, by choosing the 'Make api link'. 
+You can also make the flow into an api, by choosing the 'Make api link'. 
 </p>
 <p>
 Save your flow and allow other people to use it by pressing the 'Save flow' button. 
