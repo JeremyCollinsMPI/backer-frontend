@@ -33,9 +33,7 @@ class Steps extends React.Component {
     currentStepNumber: currentStepNumber,
     inputs: this.state.inputs.concat({'type': 'undefined'}),
     additionalInputs: this.state.additionalInputs.concat({'type': 'undefined'})
-  })
-  let url = this.ip + ":8080/wake_up_gcp";
-  axios.get(url);
+  });
   }
   
   handleDropdownChange(e) {
@@ -43,6 +41,8 @@ class Steps extends React.Component {
     const functions = this.state.functions;
     functions[index] = e.target.value;
     this.setState({ functions: functions });
+    let url = this.ip + ":8080/wake_up_gcp";
+    axios.get(url);
   }
 
   handleInputDropdownChange(e) {
@@ -142,9 +142,10 @@ class Steps extends React.Component {
   if(this.state.functions[index] == "Ask question"){
     return(
     <div>
-    <div className="l">Question:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange}></input></div>)
-    <div className="l">Model [choose from the Models page]:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChangeMore}></input></div>)
+    <div className="l">Question:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange}></input></div>
+    <div className="l">Model [choose from the Models page]:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChangeMore}></input></div>
     </div>
+    )
   }  
   if(this.state.functions[index] == "Random sample from array"){
     return(<div className="l">Sample size<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange}></input></div>)
