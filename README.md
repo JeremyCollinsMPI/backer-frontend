@@ -1,5 +1,3 @@
-Link to demo:
+Video of demo:
 
-http://103.102.44.216:3000/
-
-![alt text](demo_images/1.png)
+![alt text](demo_images/demo1.mov)
