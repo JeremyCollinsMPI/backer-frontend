@@ -1,3 +1,3 @@
 Video of demo:
 
-![alt text](demo_images/demo1.mov)
+https://github.com/JeremyCollinsMPI/backer-frontend/demo_images/demo1.mov
