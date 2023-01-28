@@ -102,6 +102,16 @@ class Steps extends React.Component {
   let example_array = ["Find sentences with string", "Semantic search"];
   console.log(example_array);
   console.log(example_array.includes(this.state.functions[index]));
+  
+  if(this.state.functions[index] == "Split text into sections"){
+    return(<div className="l">Number of words per section:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
+  }
+  if(this.state.functions[index] == "Find most relevant section"){
+    return(<div className="l2">Query:<input type="text" size="200" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
+  }
+  if(this.state.functions[index] == "Submit query about text"){
+    return(<div className="l2">Query:<input type="text" size="200" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
+  }
   if(this.state.functions[index] == "Get sentences from CSV"){
     return(<div className="l">Column name:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
   }
@@ -277,7 +287,10 @@ class Steps extends React.Component {
        {inputDropdownMenu}
        <div className="f">   <select name="functions" id={thing} onChange={this.handleDropdownChange}>
     <option value="Choose function">Choose function</option>
-    <option value="Classify">Classify</option>
+    <option value="Get text from text file">Get text from text file</option>
+    <option value="Split text into sections">Split text into sections</option>
+    <option value="Find most relevant section">Find most relevant section</option>
+    <option value="Submit query about text">Submit query about text</option>
     <option value="Get sentences from CSV">Get sentences from CSV</option>
     <option value="Semantic search">Semantic search</option>
     <option value="Find relevant sentence">Find relevant sentence</option>
@@ -372,5 +385,6 @@ For demos, look at the 'Flows' page.
 // ========================================
 
 ReactDOM.render(<Steps />, document.getElementById("root"));
+
 
 
