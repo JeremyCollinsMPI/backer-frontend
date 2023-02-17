@@ -291,6 +291,7 @@ class Steps extends React.Component {
     <option value="Split text into sections">Split text into sections</option>
     <option value="Find most relevant section">Find most relevant section</option>
     <option value="Submit query about text">Submit query about text</option>
+    <option value="Tesseract OCR from PDF">Tesseract OCR from PDF</option>
     <option value="Get sentences from CSV">Get sentences from CSV</option>
     <option value="Semantic search">Semantic search</option>
     <option value="Find relevant sentence">Find relevant sentence</option>
