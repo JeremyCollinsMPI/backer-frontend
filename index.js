@@ -311,6 +311,7 @@ class Steps extends React.Component {
     <option value="Compare two label dicts">Compare two label dicts</option>
     <option value="Random sample from array">Random sample from array</option>
     <option value="Make api link">Make api link</option>
+    <option value="Return earlier output">Return earlier output</option>
   </select>  
 
          <div className="p">{outputName}</div> 
