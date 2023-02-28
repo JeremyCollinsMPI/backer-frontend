@@ -102,7 +102,9 @@ class Steps extends React.Component {
   let example_array = ["Find sentences with string", "Semantic search"];
   console.log(example_array);
   console.log(example_array.includes(this.state.functions[index]));
-  
+  if(this.state.functions[index] == "Tesseract OCR from PDF"){
+    return(<div className="l">(Optional) Page numbers inclusive, separated by dash:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
+  }
   if(this.state.functions[index] == "Split text into sections"){
     return(<div className="l">Number of words per section:<input type="text" id={index} onChange={this.handleAdditionalInputChange}></input></div>)
   }
