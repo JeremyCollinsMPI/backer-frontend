@@ -1,7 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import axios from 'axios';
+
+function SaveNameTextInput(props) {
+  const [inputValue, setInputValue] = useState('');
+
+  function handleKeyDown(event) {
+    if (event.key === 'Enter') {
+      props.onEnter(inputValue);
+      setInputValue('');
+    }
+  }
+
+  return (
+    <input
+      type="text"
+      value={inputValue}
+      onChange={(event) => setInputValue(event.target.value)}
+      onKeyDown={handleKeyDown}
+    />
+  );
+}
 
 class Steps extends React.Component {
   constructor(props) {
@@ -274,6 +294,25 @@ class Steps extends React.Component {
   this.setState({"in_progress": false});
   }
   
+  saveFlow() {
+    this.setState({ show_save_name_box: true }, () => {
+    console.log(this.state.show_save_name_box);
+  });
+    
+  }
+
+  handleNameBoxEnter = (inputValue) => {
+    // Your save_flow function logic goes here
+    console.log('Save flow function called with input value:', inputValue);
+    let url = this.ip + ":8080/save_flow?name=" + inputValue;
+    console.log(url);
+    let data = this.state;
+    axios.post(url, data).then(response => {console.log(response)}); 
+
+  }
+
+
+  
   render() {
     const stepNumbers = this.state.stepNumbers;  
     const steps = stepNumbers.map(thing => {
@@ -334,6 +373,10 @@ class Steps extends React.Component {
     if (this.state.in_progress){
       inProgressHeader = "In progress";
     }
+    let saveNameBox = '';
+    if (this.state.show_save_name_box){
+      saveNameBox = <SaveNameTextInput onEnter={this.handleNameBoxEnter} /> 
+    }
     const result = resultList.map(thing => {
     return (
     <div>{thing}</div>    
@@ -343,6 +386,9 @@ class Steps extends React.Component {
     return (
 <div>
 <div>
+<button className="n">Flows</button>
+<button className="n2" onClick={() => this.saveFlow()}>Save Flow</button> 
+{saveNameBox}
 <p>
 Backer is a platform for NLP tasks which aims to minimise the amount of work and coding to integrate models and sources of data. 
 </p>
