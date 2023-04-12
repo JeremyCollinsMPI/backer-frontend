@@ -1,2 +1,2 @@
-cp /moose/* /my-app/src/
+cp -r /moose/* /my-app/src/
 npm start
