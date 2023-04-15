@@ -29,6 +29,15 @@ function SaveNameTextInput(props) {
   );
 }
 
+function createArray(n) {
+  const arr = [];
+
+  for (let i = 0; i <= n; i++) {
+    arr.push(i);
+  }
+
+  return arr;
+}
 
 class Flow extends React.Component {
   
@@ -242,7 +251,8 @@ class Flow extends React.Component {
   
   makeInputDropdownMenu(thing) { 
   const array1 = ["Choose input", "file or directory", "Text input", "Api input"]
-  const array2 = this.state.stepNumbers.map(function(stepNumber){
+  let step_numbers = createArray(parseInt(thing) - 1);
+  const array2 = step_numbers.map(function(stepNumber){
     return ('Output ' + (stepNumber+1).toString())
   });
   const array3 = array1.concat(array2);
