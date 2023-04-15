@@ -59,6 +59,8 @@ class Flow extends React.Component {
     this.handleAdditionalInputChangeMore = this.handleAdditionalInputChangeMore.bind(this);
     this.onTextChange = this.onTextChange.bind(this);
     this.showTextInput = this.showTextInput.bind(this);
+    this.removeStep = this.removeStep.bind(this);
+    this.handleDeleteButtonClick = this.handleDeleteButtonClick.bind(this);
   }
   
   addStep() {
@@ -256,6 +258,9 @@ class Flow extends React.Component {
   return(<option value={item}>{mapName(item)}</option>)
   }
   );
+//   console.log('making');
+//   console.log(thing);
+//   console.log(this.state);
   return(
          <div className="f">   <select name="input" id={thing} onChange={this.handleInputDropdownChange} value={this.state.inputs[thing].name}> 
   {array4}
@@ -331,8 +336,54 @@ class Flow extends React.Component {
     await axios.get(url).then(response => {this.setState(response.data); console.log('monkey'); console.log(this.state)});
     this.needToCall = false;
   }
-
   
+  makeDeleteButton(index){
+    return(<button id={index} class="deleteButton" onClick={this.handleDeleteButtonClick}>delete</button>)
+  }
+  
+  handleDeleteButtonClick(e){
+    const target = e.target;
+    const index = target.id;
+    this.removeStep(index);
+  }
+
+  removeStep(index){
+    let arr = this.state.stepNumbers;
+    let i = arr.indexOf(parseInt(index));
+    console.log('index');
+    console.log(index);
+    console.log(i);
+    console.log(this.state.stepNumbers);
+    if (i > -1) {
+    arr.splice(i, 1); 
+    for (let j = i; j < arr.length; j++) {
+      arr[j] -= 1; 
+      }
+    }
+    
+    let inputs = this.state.inputs;
+    inputs.splice(i, 1);
+    for (let j = i; j < inputs.length; j++) {
+      console.log('frog');
+      console.log(i);
+      console.log(inputs[j]);
+      if (inputs[j].type == 'Output'){
+        inputs[j].index -= 1 ;
+        inputs[j].name = 'Output ' + (inputs[j].index + 1).toString() ;
+      }
+    }
+    let functions = this.state.functions;
+    functions.splice(i, 1);
+    let additionalInputs = this.state.additionalInputs;
+    additionalInputs.splice(i, 1);
+    this.setState({"stepNumbers": arr,
+      "currentStepNumber": this.state.currentStepNumber - 1,
+      "functions": functions,
+      "inputs": inputs,
+      "additionalInputs": additionalInputs
+      })
+    }
+
   render() {
     const name = this.props.params.name;
     console.log('here');
@@ -349,6 +400,7 @@ class Flow extends React.Component {
       const additionalInputs = this.makeAdditionalInputs(index);
       const inputDropdownMenu = this.makeInputDropdownMenu(thing);
       const fileUploadButton = this.showFileUploadButton(index);
+      const deleteButton = this.makeDeleteButton(index);
       const textInput = this.showTextInput(index);
       const functionName = this.state.functions[thing];
       var x = this.state.inputs[0]['type'];
@@ -385,6 +437,7 @@ class Flow extends React.Component {
   </select>  
 
          <div className="p">{outputName}</div> 
+         {deleteButton}
 </div>
        {fileUploadButton}
        {textInput}

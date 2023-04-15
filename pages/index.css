@@ -35,6 +35,72 @@ body {
 
 .h {
   padding-top: 50px;
+  white-space: nowrap;
+}
+
+.i {
+  padding-top: 50px;
+}
+
+.k {
+  width: 0px;
+}
+
+.l {
+  width: 300px;
+  padding-top: 20px;
+}
+
+.l2 {
+  width: 1500px;
+  padding-top: 20px;
+}
+
+.n {
+  width: 60px;
+  margin-top: 50px;
+}
+
+.n2 {
+  width: 120px;
+  margin-top: 50px;
+}
+
+
+
+
+.b {
+  float: right;
+  margin-right: 500px;
+
+}
+
+.a {
+  margin-left: 500px;
+}
+
+.d {
+  float:left;
+}
+
+.e {
+  float:left;
+  margin-left: 500px;
+}
+
+.f {
+  display: inline-block;
+  width: 30%;
+}
+
+.g {
+  display: inline-block;
+  width: 400px;
+}
+
+.h {
+  padding-top: 50px;
+  white-space: nowrap;
 }
 
 .i {
@@ -67,6 +133,10 @@ body {
 
 .p {
   display: inline-block;
-  width: 20%;
+  width: 15%;
   padding-left: 20%;
+}
+
+.deleteButton {
+  display: inline-block;
 }
