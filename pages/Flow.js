@@ -479,8 +479,9 @@ class Flow extends React.Component {
 </p>
 </div>
     <div>
-     <button onClick={() => this.addStep()}>Add step</button>
       {steps}
+      <button className="n2" onClick={() => this.addStep()}>Add step</button>
+      <p></p>
       <button className="n" onClick={() => this.submit()}>Submit</button>
       </div>
 <div className="i">
