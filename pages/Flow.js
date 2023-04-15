@@ -77,7 +77,8 @@ class Flow extends React.Component {
   this.setState({
     stepNumbers: this.state.stepNumbers.concat(currentStepNumber),
     currentStepNumber: currentStepNumber,
-    inputs: this.state.inputs.concat({'type': 'undefined'}),
+    inputs: this.state.inputs.concat({'type': 'Output', 'name': 'Output ' + currentStepNumber.toString(),
+      'index': currentStepNumber - 1}),
     additionalInputs: this.state.additionalInputs.concat({'type': 'undefined'})
   });
   }
