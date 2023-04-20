@@ -11,21 +11,27 @@ function withParams(Component) {
 
 function SaveNameTextInput(props) {
   const [inputValue, setInputValue] = useState('');
+  let default_value = inputValue ? inputValue : props.name
 
   function handleKeyDown(event) {
     if (event.key === 'Enter') {
       props.onEnter(inputValue);
-      setInputValue('');
+//       setInputValue('');
     }
   }
 
   return (
+  <div>
+  <p>
+  Name of flow:
+  </p>
     <input
       type="text"
-      value={inputValue}
+      value={default_value}
       onChange={(event) => setInputValue(event.target.value)}
       onKeyDown={handleKeyDown}
     />
+    </div>
   );
 }
 
@@ -59,7 +65,8 @@ class Flow extends React.Component {
      additionalInputs: [{'type': 'undefined'}],
      r: {'result': []},
      id: 123,
-     in_progress: false
+     in_progress: false,
+     name: null
      };
     this.handleDropdownChange = this.handleDropdownChange.bind(this);
     this.handleInputDropdownChange = this.handleInputDropdownChange.bind(this);
@@ -326,6 +333,12 @@ class Flow extends React.Component {
   }
   
   saveFlow() {
+    if (this.state.show_save_name_box) {
+    this.handle
+    }
+    else {
+      
+    }
     this.setState({ show_save_name_box: true }, () => {
     console.log(this.state.show_save_name_box);
   });
@@ -333,18 +346,18 @@ class Flow extends React.Component {
   }
 
   handleNameBoxEnter = (inputValue) => {
-    // Your save_flow function logic goes here
-    console.log('Save flow function called with input value:', inputValue);
-    let url = this.ip + ":8080/save_flow?name=" + inputValue;
+    let default_value = inputValue ? inputValue : this.state.name;
+    console.log('Save flow function called with input value:', default_value);
+    let url = this.ip + ":8080/save_flow?name=" + default_value;
     console.log(url);
     let data = this.state;
-    axios.post(url, data).then(response => {console.log(response)}); 
-
+    axios.post(url, data).then(response => {console.log(response); this.setState({'save_message': 'Saved flow with name ' + default_value})}); 
+    
   }
 
   async callForFlowData(name) {
     let url = this.ip + ":8080/get_flow?name=" + name;
-    await axios.get(url).then(response => {this.setState(response.data); console.log('monkey'); console.log(this.state)});
+    await axios.get(url).then(response => {this.setState(response.data); this.setState({"name": name})});
     this.needToCall = false;
   }
   
@@ -459,10 +472,10 @@ class Flow extends React.Component {
     }
     let saveNameBox = '';
     if (this.state.show_save_name_box){
-      saveNameBox = <SaveNameTextInput onEnter={this.handleNameBoxEnter} /> 
+      saveNameBox = <SaveNameTextInput onEnter={this.handleNameBoxEnter} name={name}/> 
     }
+    let save_message = this.state.save_message ? this.state.save_message : '';
     
-    const nameHeader = name ? 'Flow: ' + name : '';
 
     const result = resultList.map(thing => {
     return (
@@ -477,7 +490,7 @@ class Flow extends React.Component {
 <button className="n2" onClick={() => this.saveFlow()}>Save Flow</button> 
 {saveNameBox}
 <p>
-{nameHeader} 
+{save_message}
 </p>
 </div>
     <div>
