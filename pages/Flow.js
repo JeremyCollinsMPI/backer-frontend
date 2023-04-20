@@ -333,12 +333,12 @@ class Flow extends React.Component {
   }
   
   saveFlow() {
-    if (this.state.show_save_name_box) {
-    this.handle
-    }
-    else {
-      
-    }
+//     if (this.state.show_save_name_box) {
+//     this.handle
+//     }
+//     else {
+//       
+//     }
     this.setState({ show_save_name_box: true }, () => {
     console.log(this.state.show_save_name_box);
   });
