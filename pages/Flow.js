@@ -5,6 +5,10 @@ import axios from 'axios';
 import { useParams } from "react-router-dom";
 
 
+function withParams(Component) {
+  return props => <Component {...props} params={useParams()} />;
+}
+
 function createArray(n) {
   const arr = [];
 
