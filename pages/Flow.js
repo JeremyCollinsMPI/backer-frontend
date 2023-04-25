@@ -192,6 +192,9 @@ class Flow extends React.Component {
   if(this.state.functions[index] == "Union of outputs"){
     return(<div className="l">Outputs:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange} value={this.state.additionalInputs[index].text}></input></div>)
   }
+  if(this.state.functions[index] == "Custom output format"){
+    return(<div className="l">Format:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange} value={this.state.additionalInputs[index].text}></input></div>)
+  }
   if(this.state.functions[index] == "Classify intent with array input"){
     return(<div className="l">Intents and examples input:<input type="text" id={index} size="70" onChange={this.handleAdditionalInputChange} value={this.state.additionalInputs[index].text}></input></div>)
   }      
@@ -446,6 +449,7 @@ class Flow extends React.Component {
     <option value="Get intents and examples">Get intents and examples</option>
     <option value="Classify intent">Classify intent</option>
     <option value="Random sample from array">Random sample from array</option>
+    <option value="Custom output format">Custom output format</option>
     <option value="Make api link">Make api link</option>
     <option value="Return earlier output">Return earlier output</option>
   </select>  
