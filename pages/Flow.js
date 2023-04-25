@@ -27,7 +27,6 @@ class Flow extends React.Component {
 
     const name = this.props.params.name;
     if (name){
-    console.log('fish');
     this.needToCall = true;
     } 
     
@@ -38,7 +37,7 @@ class Flow extends React.Component {
      inputs: [{'type': 'undefined'}],
      additionalInputs: [{'type': 'undefined'}],
      r: {'result': []},
-     id: 123,
+     id: Math.round(Math.random() * 10000000),
      in_progress: false,
      name: null
      };
@@ -99,6 +98,8 @@ class Flow extends React.Component {
       var inputs = this.state.inputs;
       const index = event.target.id;
       inputs[index]['file'] = event.target.files[0];
+      inputs[index]['filename'] = event.target.files[0].name;
+      inputs[index]['already_submitted'] = false;
       this.setState({ 
       inputs: inputs});     
     };
@@ -127,10 +128,7 @@ class Flow extends React.Component {
   }
 
   makeAdditionalInputs(index) {
-  console.log(this.state.functions[index])
   let example_array = ["Find sentences with string", "Semantic search"];
-  console.log(example_array);
-  console.log(example_array.includes(this.state.functions[index]));
   if(this.state.functions[index] == "Tesseract OCR from PDF"){
     return(<div className="l">(Optional) Page numbers inclusive, separated by dash:<input type="text" id={index} onChange={this.handleAdditionalInputChange} value={this.state.additionalInputs[index].text}></input></div>)
   }
@@ -213,9 +211,16 @@ class Flow extends React.Component {
   
   showFileUploadButton(index) {
   if (this.state.inputs[index]['type'] == 'file or directory'){
-  return(  <form className = "l">
+  let file_text = this.state.inputs[index].filename ? this.state.inputs[index].filename : '';
+  return(  
+  <div>
+  <form className = "l">
   <input type="file" id={index} onChange={this.onFileChange}></input>
   </form>
+  <p>
+  {file_text}
+  </p>
+  </div>
   )  
   } else {
   return (<div className="k"></div>)
@@ -226,7 +231,8 @@ class Flow extends React.Component {
   showTextInput(index) {
   if (this.state.inputs[index]['type'] == 'Text input')
     {
-    return(<form className="l"><input type="text" id={index} onChange={this.onTextChange}></input></form>)
+    let text = this.state.inputs[index]['text'] ? this.state.inputs[index]['text'] : '';
+    return(<form className="l"><input type="text" id={index} onChange={this.onTextChange} value={text}></input></form>)
     }  
   else{ return (<div className="k"></div>)
   }
@@ -251,9 +257,6 @@ class Flow extends React.Component {
   return(<option value={item}>{mapName(item)}</option>)
   }
   );
-//   console.log('making');
-//   console.log(thing);
-//   console.log(this.state);
   return(
          <div className="f">   <select name="input" id={thing} onChange={this.handleInputDropdownChange} value={this.state.inputs[thing].name}> 
   {array4}
@@ -263,13 +266,21 @@ class Flow extends React.Component {
     } 
 
   async submitFile(index) {
+  console.log('submitting file');
   const data = new FormData()
+  if(this.state.inputs[index]['file'] && ! this.state.inputs[index]['already_submitted']){
   data.append('file', this.state.inputs[index]['file'])
   let id = this.state.id;
   let step = index;
   let url = this.ip + ":8080/accept_file?id=" + id + "&step=" + index;
-  await axios.post(url, data);
-    
+  await axios.post(url, data).then((response) => {
+      console.log(response); 
+      let inputs = this.state.inputs;
+      inputs[index]['file'] = response.data.checksum_filename; 
+      inputs[index]['already_submitted'] = true;
+      this.setState({"inputs": inputs})});
+      console.log('submitted file');  
+  }
   }
 
   async submitFiles() {
@@ -300,9 +311,7 @@ class Flow extends React.Component {
   this.setState({"in_progress": true});
   this.setState({"r": {'result': []}});
   let x = await this.submitSteps();
-  console.log(x);
   let y = await this.submitFiles();
-  console.log(y);
   let z = await this.submitRun();
   this.setState({"in_progress": false});
   }
@@ -313,17 +322,20 @@ class Flow extends React.Component {
     }
     else {
      this.setState({ show_save_name_box: true }, () => {
-     console.log(this.state.show_save_name_box);
      });      
     }
   }
   
-  handleSaveButton() {
+  async handleSaveButton() {
+    let new_id = Math.round(Math.random() * 10000000);
+    this.setState({"id": new_id});
     let name = this.state.name;
     console.log('Save flow function called with input value:', name);
     let url = this.ip + ":8080/save_flow?name=" + name;
-    console.log(url);
     let data = this.state;
+    data["id"] = new_id;
+    let x = await this.submitSteps();
+    let y = await this.submitFiles();
     axios.post(url, data).then(response => {console.log(response); this.setState({'save_message': 'Saved flow with name ' + name})}); 
   }
   
@@ -350,7 +362,12 @@ class Flow extends React.Component {
 
   async callForFlowData(name) {
     let url = this.ip + ":8080/get_flow?name=" + name;
-    await axios.get(url).then(response => {this.setState(response.data); this.setState({"name": name})});
+    await axios.get(url).then(response => {
+      this.setState(response.data); 
+      this.setState({"name": name}); 
+      this.setState({"id": Math.round(Math.random() * 10000000)})
+      }
+      );
     this.needToCall = false;
   }
   
@@ -367,10 +384,6 @@ class Flow extends React.Component {
   removeStep(index){
     let arr = this.state.stepNumbers;
     let i = arr.indexOf(parseInt(index));
-    console.log('index');
-    console.log(index);
-    console.log(i);
-    console.log(this.state.stepNumbers);
     if (i > -1) {
     arr.splice(i, 1); 
     for (let j = i; j < arr.length; j++) {
@@ -381,9 +394,6 @@ class Flow extends React.Component {
     let inputs = this.state.inputs;
     inputs.splice(i, 1);
     for (let j = i; j < inputs.length; j++) {
-      console.log('frog');
-      console.log(i);
-      console.log(inputs[j]);
       if (inputs[j].type == 'Output'){
         inputs[j].index -= 1 ;
         inputs[j].name = 'Output ' + (inputs[j].index + 1).toString() ;
@@ -403,11 +413,7 @@ class Flow extends React.Component {
 
   render() {
     const name = this.props.params.name;
-    console.log('here');
-    console.log(this.state);
-    console.log(name);
     if (this.needToCall){
-      console.log("maatey");
       this.callForFlowData(name);
     }
     const stepNumbers = this.state.stepNumbers;  
@@ -453,7 +459,6 @@ class Flow extends React.Component {
 </div>
       );
     });
-    console.log(this.state.additionalInputs);
     const resultList = this.state.r.result;
     let resultHeader = '';
     if(resultList.length > 0){
