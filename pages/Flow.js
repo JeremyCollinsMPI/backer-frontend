@@ -39,7 +39,8 @@ class Flow extends React.Component {
      r: {'result': []},
      id: Math.round(Math.random() * 10000000),
      in_progress: false,
-     name: null
+     name: null,
+     in_progress_message: 'In progress'
      };
     this.handleDropdownChange = this.handleDropdownChange.bind(this);
     this.handleInputDropdownChange = this.handleInputDropdownChange.bind(this);
@@ -51,6 +52,7 @@ class Flow extends React.Component {
     this.removeStep = this.removeStep.bind(this);
     this.handleDeleteButtonClick = this.handleDeleteButtonClick.bind(this);
     this.handleSaveNameBoxChange = this.handleSaveNameBoxChange.bind(this);
+    this.callForStatus = this.callForStatus.bind(this);
   }
   
   addStep() {
@@ -298,16 +300,27 @@ class Flow extends React.Component {
   async submitSteps() {
     let data = {'state': this.state}
     let url = this.ip + ":8080/accept_steps?id=" + this.state.id;
-       await axios.post(url, data).then((response) => {
+    await axios.post(url, data).then((response) => {
   console.log(response);
   }, (error) => {
   console.log(error);
   });
   }
-    
+  
+  async callForStatus(){
+    if (this.state.in_progress){
+    console.log(this.state.id);
+    let url = this.ip + ":8080/running_status?id=" + this.state.id;
+    axios.get(url).then(response => {this.setState({"in_progress_message": response.data.in_progress_message})});
+  }
+  }
+      
   async submitRun() {
   let url = this.ip + ":8080/run?id=" + this.state.id;
+  const interval = setInterval(this.callForStatus, 1000);
   await axios.get(url).then(response => {this.setState({"r": response.data})}); 
+  this.setState({"in_progress": false});
+  clearInterval(interval)
   }
   
   async submit() {
@@ -315,8 +328,7 @@ class Flow extends React.Component {
   this.setState({"r": {'result': []}});
   let x = await this.submitSteps();
   let y = await this.submitFiles();
-  let z = await this.submitRun();
-  this.setState({"in_progress": false});
+  let z = this.submitRun();
   }
   
   saveFlow() {
@@ -470,7 +482,7 @@ class Flow extends React.Component {
     }
     let inProgressHeader = '';
     if (this.state.in_progress){
-      inProgressHeader = "In progress";
+      inProgressHeader = this.state.in_progress_message;
     }
     let saveNameBox = '';
     if (this.state.show_save_name_box){
