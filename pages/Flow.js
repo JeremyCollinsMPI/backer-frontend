@@ -52,7 +52,7 @@ class Flow extends React.Component {
     this.removeStep = this.removeStep.bind(this);
     this.handleDeleteButtonClick = this.handleDeleteButtonClick.bind(this);
     this.handleSaveNameBoxChange = this.handleSaveNameBoxChange.bind(this);
-    this.callForStatus = this.callForStatus.bind(this);
+    this.callForResult = this.callForResult.bind(this);
   }
   
   addStep() {
@@ -307,20 +307,29 @@ class Flow extends React.Component {
   });
   }
   
-  async callForStatus(){
+  async callForResult(){
     if (this.state.in_progress){
     console.log(this.state.id);
-    let url = this.ip + ":8080/running_status?id=" + this.state.id;
-    axios.get(url).then(response => {this.setState({"in_progress_message": response.data.in_progress_message})});
-  }
+    let url = this.ip + ":8080/result?id=" + this.state.id;
+    axios.get(url).then(response => {
+      console.log(response.data);
+      this.setState({"in_progress": response.data.in_progress});
+      if (response.data.in_progress == true){
+        this.setState({"in_progress_message": response.data.in_progress_message})
+      }
+      if (response.data.in_progress == false){
+        this.setState({"r": {"result": response.data.result}});
+        clearInterval(this.state.interval)
+      }
+      });
+    }
   }
       
   async submitRun() {
   let url = this.ip + ":8080/run?id=" + this.state.id;
-  const interval = setInterval(this.callForStatus, 1000);
-  await axios.get(url).then(response => {this.setState({"r": response.data})}); 
-  this.setState({"in_progress": false});
-  clearInterval(interval)
+  axios.get(url); 
+  this.setState({"in_progress": true});
+  this.setState({"interval": setInterval(this.callForResult, 5000)})
   }
   
   async submit() {
