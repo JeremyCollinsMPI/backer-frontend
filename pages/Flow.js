@@ -45,6 +45,7 @@ class Flow extends React.Component {
     this.handleDropdownChange = this.handleDropdownChange.bind(this);
     this.handleInputDropdownChange = this.handleInputDropdownChange.bind(this);
     this.onFileChange = this.onFileChange.bind(this); 
+    this.handleLibraryDropdownChange = this.handleLibraryDropdownChange.bind(this);
     this.handleAdditionalInputChange = this.handleAdditionalInputChange.bind(this);
     this.handleAdditionalInputChangeMore = this.handleAdditionalInputChangeMore.bind(this);
     this.onTextChange = this.onTextChange.bind(this);
@@ -93,6 +94,9 @@ class Flow extends React.Component {
     if (inputs[index]['name'] == 'Text input'){
       inputs[index]['type'] = 'Text input';
     }
+    if (inputs[index]['name'] == 'Library'){
+      inputs[index]['type'] = 'Library';
+    }
     this.setState({ inputs: inputs });
   }
 
@@ -129,6 +133,13 @@ class Flow extends React.Component {
     this.setState({additionalInputs: additionalInputs});
   }
 
+  handleLibraryDropdownChange = event => { 
+      var inputs = this.state.inputs;
+      const index = event.target.id;
+      inputs[index]['library_name'] = event.target.value;
+      this.setState({inputs: inputs});
+  }
+
   makeAdditionalInputs(index) {
   let example_array = ["Find sentences with string", "Semantic search"];
   if(this.state.functions[index] == "Tesseract OCR from PDF"){
@@ -141,6 +152,9 @@ class Flow extends React.Component {
     return(<div className="l2">Query:<input type="text" size="200" id={index} onChange={this.handleAdditionalInputChange} value={this.state.additionalInputs[index].text}></input></div>)
   }
   if(this.state.functions[index] == "Submit query about text"){
+    return(<div className="l2">Query:<input type="text" size="200" id={index} onChange={this.handleAdditionalInputChange} value={this.state.additionalInputs[index].text}></input></div>)
+  }
+  if(this.state.functions[index] == "Submit query about library"){
     return(<div className="l2">Query:<input type="text" size="200" id={index} onChange={this.handleAdditionalInputChange} value={this.state.additionalInputs[index].text}></input></div>)
   }
   if(this.state.functions[index] == "Get sentences from CSV"){
@@ -232,6 +246,22 @@ class Flow extends React.Component {
   }  
   }
   
+  makeLibraryDropdownMenu(index) {
+  if (this.state.inputs[index]['type'] == 'Library') {
+  const array1 = ["Choose Library", "Grambank"]
+  const array2 = array1.map(function(item){
+  return(<option value={item}>{item}</option>)
+  }
+  );
+  return(
+         <div className="f">   <select name="input" id={index} onChange={this.handleLibraryDropdownChange} value={this.state.inputs[index].library_name}> 
+  {array2}
+  </select>  
+       </div>      
+  )
+  } else{ return (<div className="k"></div>)
+  }
+  }
   
   showTextInput(index) {
   if (this.state.inputs[index]['type'] == 'Text input')
@@ -244,7 +274,7 @@ class Flow extends React.Component {
   }
   
   makeInputDropdownMenu(thing) { 
-  const array1 = ["Choose input", "file or directory", "Text input", "Api input"]
+  const array1 = ["Choose input", "file or directory", "Text input", "Api input", "Library"]
   let step_numbers = createArray(parseInt(thing) - 1);
   const array2 = step_numbers.map(function(stepNumber){
     return ('Output ' + (stepNumber+1).toString())
@@ -449,6 +479,7 @@ class Flow extends React.Component {
       const fileUploadButton = this.showFileUploadButton(index);
       const deleteButton = this.makeDeleteButton(index);
       const textInput = this.showTextInput(index);
+      const libraryDropdownMenu = this.makeLibraryDropdownMenu(index);
       const functionName = this.state.functions[thing];
       var x = this.state.inputs[0]['type'];
       return (
@@ -460,6 +491,7 @@ class Flow extends React.Component {
     <option value="Split text into sections">Split text into sections</option>
     <option value="Find most relevant section">Find most relevant section</option>
     <option value="Submit query about text">Submit query about text</option>
+    <option value="Submit query about library">Submit query about library</option>
     <option value="Tesseract OCR from PDF">Tesseract OCR from PDF</option>
     <option value="Get sentences from CSV">Get sentences from CSV</option>
     <option value="Word document to text file">Word document to text file</option>
@@ -481,6 +513,7 @@ class Flow extends React.Component {
        {fileUploadButton}
        {textInput}
        {additionalInputs}
+       {libraryDropdownMenu}
 </div>
       );
     });
